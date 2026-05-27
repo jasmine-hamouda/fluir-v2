@@ -1,1 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fluir — V2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="images/fluir-logo.png" />
+</head>
+<body>
 
+<div class="page-wrapper">
+  <div class="phone-frame">
+
+    <!-- ============ SCREEN 1: ONBOARDING ============ -->
+    <div class="screen active" id="screen-onboarding">
+      <div class="blob blob-1"><img src="images/blob.svg" alt="" aria-hidden="true" /></div>
+      <div class="blob blob-2"><img src="images/blob(2).svg" alt="" aria-hidden="true" /></div>
+      <div class="onboarding-content">
+        <img src="images/fluir-logo.png" alt="Fluir" class="wordmark-img" />
+        <p class="tagline">finally, something that gets <em>you.</em></p>
+        <p class="onboarding-subtitle">let's set up something that actually works for you.</p>
+        <div class="value-prop-card">
+          <div class="value-prop-item"><img src="icons/check-square.svg" class="vp-icon" alt="" /><span>manage tasks at your own pace</span></div>
+          <div class="value-prop-item"><img src="icons/brain.svg" class="vp-icon" alt="" /><span>understand your ADHD brain</span></div>
+          <div class="value-prop-item"><img src="icons/heart.svg" class="vp-icon" alt="" /><span>check in with yourself daily</span></div>
+        </div>
+        <div class="onboarding-form">
+          <div class="form-card">
+            <label class="form-label">what's your biggest challenge right now?</label>
+            <div class="chip-group">
+              <button class="chip" onclick="selectChip(this, 'challenge')"><img src="icons/circle-notch.svg" class="chip-icon" alt="" /> routines</button>
+              <button class="chip" onclick="selectChip(this, 'challenge')"><img src="icons/eye.svg" class="chip-icon" alt="" /> focus</button>
+              <button class="chip" onclick="selectChip(this, 'challenge')"><img src="icons/wave-sine.svg" class="chip-icon" alt="" /> emotional regulation</button>
+              <button class="chip" onclick="selectChip(this, 'challenge')"><img src="icons/warning-circle.svg" class="chip-icon" alt="" /> overwhelm</button>
+            </div>
+          </div>
+          <div class="form-card optional-card">
+            <label class="form-label">how long since your diagnosis?</label>
+            <div class="chip-group">
+              <button class="chip" onclick="selectChip(this, 'diagnosis')">under 6 months</button>
+              <button class="chip" onclick="selectChip(this, 'diagnosis')">6–12 months</button>
+              <button class="chip" onclick="selectChip(this, 'diagnosis')">1–2 years</button>
+              <button class="chip" onclick="selectChip(this, 'diagnosis')">2+ years</button>
+            </div>
+            <p class="optional-label">optional — helps us personalise your experience</p>
+          </div>
+        </div>
+        <button class="cta-btn" onclick="navigateTo('screen-dashboard')">let's go</button>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 2: DASHBOARD ============ -->
+    <!-- V2 CHANGE: Homepage restructured — removed duplicate progress sections,
+         removed check-in reminder card, elevated quick-add task as primary action -->
+    <div class="screen" id="screen-dashboard">
+      <div class="screen-scroll">
+
+        <div class="dashboard-header">
+          <div>
+            <p class="greeting-sub" id="greeting-sub">good morning,</p>
+            <h1 class="greeting-name">Maya.</h1>
+          </div>
+          <div class="header-actions">
+            <button class="settings-btn" onclick="navigateTo('screen-settings')" aria-label="settings">
+              <img src="icons/user.svg" alt="settings" />
+            </button>
+          </div>
+        </div>
+
+        <!-- V2 CHANGE: Quick-add task is now the PRIMARY action at the top of the dashboard.
+             Previously buried in the action row — P3 feedback: "wanted a quick shortcut to add
+             a task as the primary action." -->
+        <button class="quick-add-primary" onclick="openAddTask()">
+          <img src="icons/check-square.svg" alt="" />
+          <span>add a task</span>
+          <span class="quick-add-arrow">+</span>
+        </button>
+
+        <div class="hero-card">
+          <div class="hero-card-label"><img src="icons/sun-horizon.svg" class="card-icon" alt="" /><span>today's focus</span></div>
+          <h2 class="hero-task">call the school about Mia's appointment</h2>
+          <div class="time-chip"><img src="icons/clock.svg" class="chip-icon" alt="" /> 15 min</div>
+        </div>
+
+        <div class="mood-section">
+          <!-- collapsed trigger button -->
+          <button class="mood-trigger" id="mood-trigger" onclick="expandMood()" aria-expanded="false" aria-controls="mood-expand">
+            <img src="icons/smiley.svg" class="mood-trigger-icon" alt="" />
+            <span id="mood-trigger-label">how are you feeling?</span>
+            <span class="mood-trigger-arrow" id="mood-trigger-arrow">›</span>
+          </button>
+          <!-- expandable panel -->
+          <div class="mood-expand" id="mood-expand" role="group" aria-label="mood options">
+            <div class="mood-row">
+              <button class="mood-btn" onclick="selectMood(this, 'calm')" aria-pressed="false"><img src="icons/smiley.svg" class="mood-icon" alt="calm" /><span>calm</span></button>
+              <button class="mood-btn" onclick="selectMood(this, 'okay')" aria-pressed="false"><img src="icons/smiley-meh.svg" class="mood-icon" alt="okay" /><span>okay</span></button>
+              <button class="mood-btn" onclick="selectMood(this, 'overwhelmed')" aria-pressed="false"><img src="icons/smiley-nervous.svg" class="mood-icon" alt="overwhelmed" /><span>overwhelmed</span></button>
+            </div>
+            <div class="mood-why" id="mood-why">
+              <p class="mood-why-prompt">want to add a note?</p>
+              <textarea class="mood-why-input" id="mood-why-input" placeholder="what's going on? (optional)" rows="2"></textarea>
+              <button class="mood-why-save" onclick="saveMoodEntry()">save</button>
+            </div>
+            <div class="mood-saved" id="mood-saved">
+              <p class="mood-saved-text">mood logged ✓</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- V2 CHANGE: Combined the two separate progress sections ("today's progress 1 of 4"
+             and "12 tasks completed this week") into a single unified progress bar.
+             P1 (Saja) and P5 both flagged this as cluttered and confusing. -->
+        <div class="progress-unified">
+          <div class="progress-unified-header">
+            <span class="progress-unified-label">this week</span>
+            <span class="progress-unified-count" id="progress-count">1 of 4 today · 12 this week</span>
+          </div>
+          <div class="progress-bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" aria-label="today's progress">
+            <div class="progress-bar-fill" id="progress-bar-fill" style="width: 25%;"></div>
+          </div>
+          <button class="weekly-review-inline" onclick="navigateTo('screen-reflection')">see full review →</button>
+        </div>
+
+        <!-- V2 CHANGE: Secondary action row — brain dump and hard day only.
+             Add task removed from here (promoted to top). Layout is cleaner
+             with only 2 items instead of 3. -->
+        <div class="dashboard-actions">
+          <button class="dash-action-btn" onclick="navigateTo('screen-braindump')">
+            <img src="icons/brain.svg" alt="" />
+            <span>brain dump</span>
+          </button>
+          <button class="dash-action-btn hard-day" onclick="activateHardDay()" aria-label="activate hard day mode">
+            <img src="icons/heart.svg" alt="" />
+            <span>hard day</span>
+          </button>
+        </div>
+
+        <!-- V2 CHANGE: "Hard day" and "Learn" are now surfaced with a direct shortcut card
+             on the dashboard. P2 couldn't find hard day mode, P4 couldn't find
+             psychoeducation — both are now one tap from home. -->
+        <div class="discover-row">
+          <button class="discover-card" onclick="navigateTo('screen-library')">
+            <img src="icons/books.svg" alt="" />
+            <div>
+              <p class="discover-card-title">learn</p>
+              <p class="discover-card-sub">short reads for your brain</p>
+            </div>
+          </button>
+          <button class="discover-card" onclick="navigateTo('screen-sensory')">
+            <img src="icons/wave-sine.svg" alt="" />
+            <div>
+              <p class="discover-card-title">toolkit</p>
+              <p class="discover-card-sub">breathing and grounding</p>
+            </div>
+          </button>
+        </div>
+
+        <div class="nudge-card" id="nudge-card">
+          <img src="icons/sun-dim.svg" class="nudge-icon" alt="" />
+          <p id="nudge-text">feeling stuck? start with just one minute.</p>
+        </div>
+
+        <!-- V2 CHANGE: Check-in reminder REMOVED from homepage.
+             P3 feedback: "found the check-in reminder on homepage unnecessary —
+             expected it in settings." It now lives only in settings as a toggle. -->
+
+      </div>
+      <nav class="bottom-nav">
+        <button class="nav-btn active" onclick="navigateTo('screen-dashboard')"><img src="icons/house.svg" alt="Home" /><span>home</span></button>
+        <button class="nav-btn" onclick="navigateTo('screen-tasks')"><img src="icons/check-square.svg" alt="Tasks" /><span>tasks</span></button>
+        <button class="nav-btn" onclick="navigateTo('screen-library')"><img src="icons/books.svg" alt="Learn" /><span>learn</span></button>
+        <button class="nav-btn" onclick="navigateTo('screen-checkin')"><img src="icons/heart.svg" alt="Check-in" /><span>check-in</span></button>
+        <button class="nav-btn" onclick="navigateTo('screen-community')"><img src="icons/users.svg" alt="Community" /><span>community</span></button>
+      </nav>
+    </div>
+
+    <!-- ============ SCREEN 3: TASK MANAGER ============ -->
+    <div class="screen" id="screen-tasks">
+      <div class="screen-scroll">
+        <div class="screen-header">
+          <div><h1 class="screen-title">your tasks.</h1><p class="screen-subtitle">Thursday, 15 May</p></div>
+        </div>
+        <div class="category-filter">
+          <button class="cat-filter-chip active" onclick="filterCategory(this,'all')">all</button>
+          <button class="cat-filter-chip" onclick="filterCategory(this,'kids')" style="--cat-color:#64B48C;">kids</button>
+          <button class="cat-filter-chip" onclick="filterCategory(this,'work')" style="--cat-color:#5AA0C8;">work</button>
+          <button class="cat-filter-chip" onclick="filterCategory(this,'home')" style="--cat-color:#B4A864;">home</button>
+          <button class="cat-filter-chip" onclick="filterCategory(this,'health')" style="--cat-color:#AA82C8;">health</button>
+        </div>
+        <div class="task-list" id="task-list">
+          <div class="task-card" id="task-1" data-category="kids" data-urgency="urgent" style="--task-color:#64B48C;" onclick="openTaskDetail('task-1','call the school about Mia','urgent','15 min','kids','#64B48C','today',['find the school\'s number','write down what to say','make the call'],'you show up for your kids every day. this is just one more way you do that.')">
+            <div class="task-color-bar"></div>
+            <div class="task-body">
+              <div class="task-top">
+                <div class="task-left">
+                  <button class="task-check" onclick="event.stopPropagation();completeTask('task-1')" aria-label="complete task"><img src="icons/check-circle.svg" alt="" /></button>
+                  <div class="task-info">
+                    <p class="task-name">call the school about Mia</p>
+                    <div class="task-meta">
+                      <span class="urgency-chip urgent">urgent</span>
+                      <span class="time-chip small"><img src="icons/clock.svg" class="chip-icon" alt="" /> 15 min</span>
+                      <span class="cat-tag" style="border: 1px solid rgba(100,180,140,0.4); color: #64B48C; background: transparent;">kids</span>
+                    </div>
+                    <p class="task-date">today</p>
+                  </div>
+                </div>
+                <img src="icons/arrow-right.svg" class="task-chevron" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="task-card" id="task-2" data-category="work" data-urgency="high" style="--task-color:#5AA0C8;" onclick="openTaskDetail('task-2','reply to Emma\'s message','high','5 min','work','#5AA0C8','Fri 16 May',['open the message','write a short reply','send it'],'a little movement before replying can help your brain shift gears. even just standing up and stretching first.')">
+            <div class="task-color-bar"></div>
+            <div class="task-body">
+              <div class="task-top">
+                <div class="task-left">
+                  <button class="task-check" onclick="event.stopPropagation();completeTask('task-2')" aria-label="complete task"><img src="icons/check-circle.svg" alt="" /></button>
+                  <div class="task-info">
+                    <p class="task-name">reply to Emma's message</p>
+                    <div class="task-meta">
+                      <span class="urgency-chip high">high</span>
+                      <span class="time-chip small"><img src="icons/clock.svg" class="chip-icon" alt="" /> 5 min</span>
+                      <span class="cat-tag" style="border: 1px solid rgba(90,160,200,0.4); color: #5AA0C8; background: transparent;">work</span>
+                    </div>
+                    <p class="task-date">Fri 16 May</p>
+                  </div>
+                </div>
+                <img src="icons/arrow-right.svg" class="task-chevron" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="task-card" id="task-3" data-category="home" data-urgency="medium" style="--task-color:#B4A864;" onclick="openTaskDetail('task-3','pick up groceries','medium','30 min','home','#B4A864','Sat 17 May',['check what you need','write a quick list','go when you\'re ready'],'click and collect exists for exactly this. same-day options at most supermarkets — your future self will thank you.')">
+            <div class="task-color-bar"></div>
+            <div class="task-body">
+              <div class="task-top">
+                <div class="task-left">
+                  <button class="task-check" onclick="event.stopPropagation();completeTask('task-3')" aria-label="complete task"><img src="icons/check-circle.svg" alt="" /></button>
+                  <div class="task-info">
+                    <p class="task-name">pick up groceries</p>
+                    <div class="task-meta">
+                      <span class="urgency-chip medium">medium</span>
+                      <span class="time-chip small"><img src="icons/clock.svg" class="chip-icon" alt="" /> 30 min</span>
+                      <span class="cat-tag" style="border: 1px solid rgba(180,168,100,0.4); color: #B4A864; background: transparent;">home</span>
+                    </div>
+                    <p class="task-date">Sat 17 May</p>
+                  </div>
+                </div>
+                <img src="icons/arrow-right.svg" class="task-chevron" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="task-card" id="task-4" data-category="health" data-urgency="low" style="--task-color:#AA82C8;" onclick="openTaskDetail('task-4','book GP appointment','low','10 min','health','#AA82C8','Wed 21 May',['find your GP\'s number','check your availability','call and book a time'],'taking care of yourself makes everything else more possible. this one counts.')">
+            <div class="task-color-bar"></div>
+            <div class="task-body">
+              <div class="task-top">
+                <div class="task-left">
+                  <button class="task-check" onclick="event.stopPropagation();completeTask('task-4')" aria-label="complete task"><img src="icons/check-circle.svg" alt="" /></button>
+                  <div class="task-info">
+                    <p class="task-name">book GP appointment</p>
+                    <div class="task-meta">
+                      <span class="urgency-chip low">low</span>
+                      <span class="time-chip small"><img src="icons/clock.svg" class="chip-icon" alt="" /> 10 min</span>
+                      <span class="cat-tag" style="border: 1px solid rgba(170,130,200,0.4); color: #AA82C8; background: transparent;">health</span>
+                    </div>
+                    <p class="task-date">Wed 21 May</p>
+                  </div>
+                </div>
+                <img src="icons/arrow-right.svg" class="task-chevron" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="task-complete-state" id="task-complete-state">
+          <img src="icons/check-fat.svg" class="done-icon" alt="" />
+          <h3 class="done-title">you did it.</h3>
+          <p class="done-text">that's enough for today. rest is part of the process.</p>
+        </div>
+        <button class="start-fresh-btn" onclick="resetTasks()"><img src="icons/arrow-counter-clockwise.svg" alt="" /> start fresh</button>
+      </div>
+      <button class="fab" onclick="openAddTask()" aria-label="add new task"><img src="icons/check-square.svg" alt="" /><span>add task</span></button>
+      <nav class="bottom-nav">
+        <button class="nav-btn" onclick="navigateTo('screen-dashboard')"><img src="icons/house.svg" alt="Home" /><span>home</span></button>
+        <button class="nav-btn active" onclick="navigateTo('screen-tasks')"><img src="icons/check-square.svg" alt="Tasks" /><span>tasks</span></button>
+        <button class="nav-btn" onclick="navigateTo('screen-library')"><img src="icons/books.svg" alt="Learn" /><span>learn</span></button>
+        <button class="nav-btn" onclick="navigateTo('screen-checkin')"><img src="icons/heart.svg" alt="Check-in" /><span>check-in</span></button>
+        <button class="nav-btn" onclick="navigateTo('screen-community')"><img src="icons/users.svg" alt="Community" /><span>community</span></button>
+      </nav>
+    </div>
+
+    <!-- ============ SCREEN 4: LIBRARY ============ -->
+    <!-- V2 CHANGE: Learn screen is now directly accessible from homepage discover row.
+         P4 feedback: psychoeducation content was "buried too deep in navigation." -->
+    <div class="screen" id="screen-library">
+      <div class="screen-scroll">
+        <div class="screen-header"><h1 class="screen-title">learn.</h1><p class="screen-subtitle">short reads, built for your brain.</p></div>
+        <div class="topic-chips">
+          <button class="topic-chip active" onclick="selectTopic(this)"><img src="icons/brain.svg" class="chip-icon" alt="" /> executive functioning</button>
+          <button class="topic-chip" onclick="selectTopic(this)"><img src="icons/clock.svg" class="chip-icon" alt="" /> time management</button>
+          <button class="topic-chip" onclick="selectTopic(this)"><img src="icons/arrow-right.svg" class="chip-icon" alt="" /> procrastination</button>
+          <button class="topic-chip" onclick="selectTopic(this)"><img src="icons/wave-sine.svg" class="chip-icon" alt="" /> emotional regulation</button>
+          <button class="topic-chip" onclick="selectTopic(this)"><img src="icons/eye.svg" class="chip-icon" alt="" /> inattention</button>
+          <button class="topic-chip" onclick="selectTopic(this)"><img src="icons/stack.svg" class="chip-icon" alt="" /> organisation</button>
+        </div>
+        <div class="library-cards">
+          <div class="library-card featured">
+            <div class="library-card-header" style="background:var(--teal-primary);"><img src="icons/brain.svg" class="library-card-icon" alt="" /></div>
+            <div class="library-card-body">
+              <h3 class="library-card-title">what is executive functioning?</h3>
+              <div class="card-footer">
+                <span class="read-time"><img src="icons/clock.svg" class="chip-icon" alt="" /> 3 min read</span>
+                <button class="audio-btn" onclick="showAudioToast()" aria-label="listen to this article"><img src="icons/headphones.svg" class="audio-icon" alt="" /><span>listen</span></button>
+              </div>
+            </div>
+          </div>
+          <div class="library-card">
+            <div class="library-card-header" style="background:var(--surface-2);"><img src="icons/clock.svg" class="library-card-icon" alt="" /></div>
+            <div class="library-card-body">
+              <h3 class="library-card-title">time blindness and what to do about it</h3>
+              <div class="card-footer">
+                <span class="read-time"><img src="icons/clock.svg" class="chip-icon" alt="" /> 2 min read</span>
+                <button class="audio-btn" onclick="showAudioToast()" aria-label="listen to this article"><img src="icons/headphones.svg" class="audio-icon" alt="" /><span>listen</span></button>
+              </div>
+            </div>
+          </div>
+          <div class="library-card">
+            <div class="library-card-header" style="background:var(--surface-3);"><img src="icons/arrow-right.svg" class="library-card-icon" alt="" /></div>
+            <div class="library-card-body">
+              <h3 class="library-card-title">why ADHD brains procrastinate differently</h3>
+              <div class="card-footer">
+                <span class="read-time"><img src="icons/clock.svg" class="chip-icon" alt="" /> 3 min read</span>
+                <button class="audio-btn" onclick="showAudioToast()" aria-label="listen to this article"><img src="icons/headphones.svg" class="audio-icon" alt="" /><span>listen</span></button>
+              </div>
+            </div>
+          </div>
+          <div class="library-card">
+            <div class="library-card-header" style="background:var(--teal-primary);"><img src="icons/wave-sine.svg" class="library-card-icon" alt="" /></div>
+            <div class="library-card-body">
+              <h3 class="library-card-title">emotional dysregulation — you're not overreacting</h3>
+              <div class="card-footer">
+                <span class="read-time"><img src="icons/clock.svg" class="chip-icon" alt="" /> 2 min read</span>
+                <button class="audio-btn" onclick="showAudioToast()" aria-label="listen to this article"><img src="icons/headphones.svg" class="audio-icon" alt="" /><span>listen</span></button>
+              </div>
+            </div>
+          </div>
+          <div class="library-card">
+            <div class="library-card-header" style="background:var(--surface-2);"><img src="icons/users.svg" class="library-card-icon" alt="" /></div>
+            <div class="library-card-body">
+              <h3 class="library-card-title">talking to your kids about ADHD</h3>
+              <div class="card-footer">
+                <span class="read-time"><img src="icons/clock.svg" class="chip-icon" alt="" /> 3 min read</span>
+                <button class="audio-btn" onclick="showAudioToast()" aria-label="listen to this article"><img src="icons/headphones.svg" class="audio-icon" alt="" /><span>listen</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="premium-banner">
+          <img src="icons/lock-simple.svg" class="premium-icon" alt="" />
+          <div class="premium-text"><p class="premium-title">unlock all content</p><p class="premium-sub">go premium for full access</p></div>
+          <button class="premium-btn">go premium</button>
+        </div>
+      </div>
+      <nav class="bottom-nav">
+        <button class="nav-btn" onclick="navigateTo('screen-dashboard')"><img src="icons/house.svg" alt="Home" /><span>home</span></button>
+        <button class="nav-btn" onclick="navigateTo('screen-tasks')"><img src="icons/check-square.svg" alt="Tasks" /><span>tasks</span></button>
+        <button class="nav-btn active" onclick="navigateTo('screen-library')"><img src="icons/books.svg" alt="Learn" /><span>learn</span></button>
+        <button class="nav-btn" onclick="navigateTo('screen-checkin')"><img src="icons/heart.svg" alt="Check-in" /><span>check-in</span></button>
+        <button class="nav-btn" onclick="navigateTo('screen-community')"><img src="icons/users.svg" alt="Community" /><span>community</span></button>
+      </nav>
+    </div>
+
+    <!-- ============ SCREEN 5: CHECK-IN ============ -->
+    <div class="screen" id="screen-checkin">
+      <div class="screen-scroll checkin-screen">
+        <div class="screen-header"><h1 class="screen-title">how are you today?</h1><p class="screen-subtitle">takes less than a minute.</p></div>
+        <div class="checkin-mood">
+          <button class="checkin-mood-btn" onclick="selectCheckinMood(this)"><img src="icons/smiley.svg" class="checkin-mood-icon" alt="calm" /><span>calm</span></button>
+          <button class="checkin-mood-btn" onclick="selectCheckinMood(this)"><img src="icons/smiley-meh.svg" class="checkin-mood-icon" alt="okay" /><span>okay</span></button>
+          <button class="checkin-mood-btn" onclick="selectCheckinMood(this)"><img src="icons/smiley-nervous.svg" class="checkin-mood-icon" alt="overwhelmed" /><span>overwhelmed</span></button>
+        </div>
+        <div class="checkin-form">
+          <div class="checkin-field"><label class="form-label">what went well today?</label><textarea class="checkin-input" placeholder="even something small counts..." rows="3"></textarea></div>
+          <div class="checkin-field"><label class="form-label">what was hard?</label><textarea class="checkin-input" placeholder="no judgement here..." rows="3"></textarea></div>
+          <div class="checkin-field" id="checkin-field-3">
+            <label class="form-label" id="checkin-field-3-label">one thing your kids did that made you smile today</label>
+            <textarea class="checkin-input" id="checkin-field-3-input" placeholder="even something small..." rows="2"></textarea>
+          </div>
+        </div>
+        <button class="cta-btn" onclick="submitCheckin()">save today</button>
+        <div class="checkin-confirmation" id="checkin-confirmation">
+          <img src="icons/check-fat.svg" class="confirm-icon" alt="saved" />
+          <p>saved — see you tomorrow.</p>
+          <button class="edit-link" onclick="editCheckin()">edit today</button>
+          <button class="edit-link" onclick="navigateTo('screen-mood-entries')" style="color:var(--text-muted);">view past entries</button>
+        </div>
+      </div>
+      <div class="end-of-day-reward" id="end-of-day-reward">
+        <div class="reward-content">
+          <p class="reward-week">today, Thu 15 May</p>
+          <h2 class="reward-title">today you showed up.</h2>
+          <div class="reward-stats">
+            <div class="reward-stat"><img src="icons/check-fat.svg" class="reward-icon" alt="" /><span>1 task completed</span></div>
+            <div class="reward-stat"><img src="icons/heart.svg" class="reward-icon" alt="" /><span>check-in done</span></div>
+          </div>
+          <p class="reward-affirmation">"you are allowed to be a work in progress and still be enough."</p>
+          <p class="reward-source">— Nedra Tawwab</p>
+          <button class="cta-btn" onclick="closeReward()" style="margin-top:16px;">close</button>
+        </div>
+      </div>
+      <nav class="bottom-nav">
+        <button class="nav-btn" onclick="navigateTo('screen-dashboard')"><img src="icons/house.svg" alt="Home" /><span>home</span></button>
+        <button class="nav-btn" onclick="navigateTo('screen-tasks')"><img src="icons/check-square.svg" alt="Tasks" /><span>tasks</span></button>
+        <button class="nav-btn" onclick="navigateTo('screen-library')"><img src="icons/books.svg" alt="Learn" /><span>learn</span></button>
+        <button class="nav-btn active" onclick="navigateTo('screen-checkin')"><img src="icons/heart.svg" alt="Check-in" /><span>check-in</span></button>
+        <button class="nav-btn" onclick="navigateTo('screen-community')"><img src="icons/users.svg" alt="Community" /><span>community</span></button>
+      </nav>
+    </div>
+
+    <!-- ============ SCREEN 6: COMMUNITY ============ -->
+    <div class="screen" id="screen-community">
+      <div class="screen-scroll community-screen">
+        <div class="community-content">
+          <img src="images/fluir-logo.png" alt="Fluir" class="community-icon" />
+          <h2 class="community-title">community is coming.</h2>
+          <p class="community-text">a space to connect with other mums who get it. no advice columns. no toxic positivity. just real conversations.</p>
+          <div class="waitlist-form">
+            <input type="email" class="waitlist-input" placeholder="your email address" aria-label="email address for waitlist" />
+            <button class="cta-btn" onclick="joinWaitlist()">join the waitlist</button>
+          </div>
+          <div class="waitlist-confirmation" id="waitlist-confirmation">
+            <img src="icons/check-fat.svg" class="confirm-icon" alt="" />
+            <p>you're on the list. we'll be in touch.</p>
+          </div>
+        </div>
+      </div>
+      <nav class="bottom-nav">
+        <button class="nav-btn" onclick="navigateTo('screen-dashboard')"><img src="icons/house.svg" alt="Home" /><span>home</span></button>
+        <button class="nav-btn" onclick="navigateTo('screen-tasks')"><img src="icons/check-square.svg" alt="Tasks" /><span>tasks</span></button>
+        <button class="nav-btn" onclick="navigateTo('screen-library')"><img src="icons/books.svg" alt="Learn" /><span>learn</span></button>
+        <button class="nav-btn" onclick="navigateTo('screen-checkin')"><img src="icons/heart.svg" alt="Check-in" /><span>check-in</span></button>
+        <button class="nav-btn active" onclick="navigateTo('screen-community')"><img src="icons/users.svg" alt="Community" /><span>community</span></button>
+      </nav>
+    </div>
+
+    <!-- ============ SCREEN 7: REFLECTION ============ -->
+    <div class="screen" id="screen-reflection">
+      <div class="screen-scroll">
+        <div class="reflection-header">
+          <button class="back-btn" onclick="navigateTo('screen-dashboard')"><img src="icons/arrow-counter-clockwise.svg" alt="" /> back</button>
+        </div>
+        <div class="reflection-hero">
+          <p class="reflection-week">week of 7 may</p>
+          <h1 class="reflection-title">look how far you've come.</h1>
+        </div>
+        <div class="reflection-stats">
+          <div class="stat-card"><span class="stat-number">12</span><span class="stat-label">tasks completed</span></div>
+          <div class="stat-card"><span class="stat-number">5</span><span class="stat-label">days checked in</span></div>
+          <div class="stat-card"><span class="stat-number">3</span><span class="stat-label">articles read</span></div>
+        </div>
+        <div class="mood-trend">
+          <div class="mood-trend-header">
+            <p class="section-label">your mood</p>
+            <div class="mood-view-toggle">
+              <button class="mood-view-btn active" onclick="switchMoodView(this, 'weekly')">weekly</button>
+              <button class="mood-view-btn" onclick="switchMoodView(this, 'daily')">today</button>
+            </div>
+          </div>
+          <div class="mood-chart" id="mood-chart-weekly">
+            <div class="mood-bar-wrap"><div class="mood-bar" style="height:40px;background:#3D7A6A;"></div><span class="mood-day">M</span></div>
+            <div class="mood-bar-wrap"><div class="mood-bar" style="height:60px;background:#52A08E;"></div><span class="mood-day">T</span></div>
+            <div class="mood-bar-wrap"><div class="mood-bar" style="height:50px;background:#52A08E;"></div><span class="mood-day">W</span></div>
+            <div class="mood-bar-wrap"><div class="mood-bar" style="height:30px;background:#3D7A6A;"></div><span class="mood-day">T</span></div>
+            <div class="mood-bar-wrap"><div class="mood-bar" style="height:70px;background:#84A89E;"></div><span class="mood-day">F</span></div>
+            <div class="mood-bar-wrap"><div class="mood-bar" style="height:55px;background:#52A08E;"></div><span class="mood-day">S</span></div>
+            <div class="mood-bar-wrap"><div class="mood-bar" style="height:65px;background:#52A08E;"></div><span class="mood-day">S</span></div>
+          </div>
+          <div class="mood-chart hidden" id="mood-chart-daily">
+            <div class="mood-bar-wrap"><div class="mood-bar" style="height:50px;background:#3D7A6A;"></div><span class="mood-day">9am</span></div>
+            <div class="mood-bar-wrap"><div class="mood-bar" style="height:65px;background:#52A08E;"></div><span class="mood-day">12pm</span></div>
+            <div class="mood-bar-wrap"><div class="mood-bar" style="height:30px;background:#3D7A6A;"></div><span class="mood-day">3pm</span></div>
+            <div class="mood-bar-wrap"><div class="mood-bar" style="height:45px;background:#52A08E;"></div><span class="mood-day">6pm</span></div>
+            <div class="mood-bar-wrap"><div class="mood-bar" style="height:55px;background:#52A08E;"></div><span class="mood-day">9pm</span></div>
+          </div>
+          <div class="mood-legend">
+            <span class="legend-item"><span class="legend-dot" style="background:#3D7A6A;"></span> calm</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#52A08E;"></span> okay</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#84A89E;"></span> great</span>
+          </div>
+        </div>
+        <div class="insight-card">
+          <p class="insight-label"><img src="icons/sun-horizon.svg" class="card-icon" alt="" /> fluir noticed</p>
+          <p class="insight-text" id="reflection-insight">your hardest moments this week were around 3pm — school pickup and the afternoon dip. your calmest window was Tuesday morning. you showed up every day. that is the whole point.</p>
+        </div>
+        <div class="diary-summary-card">
+          <p class="diary-summary-label">this week in your words</p>
+          <p class="diary-summary-text">"a mix of hard and good. you made a phone call you had been avoiding for a week. you asked for help for the first time in a long time. you cried in the car and called it what it was. you kept going."</p>
+        </div>
+        <div class="affirmation-card">
+          <p class="affirmation-text">"you are allowed to be a work in progress and still be enough."</p>
+          <p class="affirmation-source">— Nedra Tawwab</p>
+        </div>
+        <button class="cta-btn" onclick="navigateTo('screen-dashboard')" style="margin-bottom:8px;">back to today</button>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 8: TASK DETAIL ============ -->
+    <div class="screen" id="screen-task-detail">
+      <div class="screen-scroll">
+        <div class="task-detail-header">
+          <button class="back-btn" onclick="navigateTo('screen-tasks')"><img src="icons/arrow-counter-clockwise.svg" alt="" /> back</button>
+        </div>
+        <div class="task-detail-color-bar" id="detail-color-bar"></div>
+        <div class="task-detail-content">
+          <div class="task-detail-chips" id="detail-chips"></div>
+          <h1 class="task-detail-title" id="detail-title"></h1>
+          <p class="task-detail-date" id="detail-date"></p>
+          <div class="task-detail-section">
+            <p class="task-detail-label">break it down</p>
+            <div class="detail-steps" id="detail-steps"></div>
+          </div>
+          <div class="task-detail-tip" id="detail-tip-card">
+            <img src="icons/sun-dim.svg" class="tip-icon" alt="" />
+            <p id="detail-tip"></p>
+          </div>
+          <button class="cta-btn" id="detail-complete-btn" onclick="completeFromDetail()" style="margin-top:8px;">mark complete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 9: BRAIN DUMP ============ -->
+    <div class="screen" id="screen-braindump">
+      <div class="screen-scroll">
+        <div class="screen-header" style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div><h1 class="screen-title">brain dump.</h1><p class="screen-subtitle">get it out of your head and onto the screen.</p></div>
+          <button class="back-btn" onclick="navigateTo('screen-dashboard')"><img src="icons/arrow-counter-clockwise.svg" alt="" /> back</button>
+        </div>
+        <textarea class="brain-dump-input" id="brain-dump-input" placeholder="Dump all your tasks here as they pop into your head, no stress. eg. pick up uniforms from school, buy milk from shop, swimming lessons" rows="8"></textarea>
+        <button class="breakdown-generate-btn" onclick="organiseBrainDump()" style="margin-bottom:16px;"><img src="icons/brain.svg" alt="" /> organise into tasks</button>
+        <div class="breakdown-loading" id="dump-loading">
+          <div class="loading-dots"><span></span><span></span><span></span></div>
+          <p>reading your mind...</p>
+        </div>
+        <div class="dump-results" id="dump-results">
+          <p class="breakdown-preview-label">fluir found these tasks</p>
+          <div id="dump-task-list"></div>
+          <p class="dump-confirm-text">do these look right?</p>
+          <div class="dump-actions">
+            <button class="cta-btn" onclick="addDumpTasks()">add all to tasks</button>
+            <button class="start-fresh-btn" onclick="clearDump()" style="margin-top:8px;">start over</button>
+          </div>
+        </div>
+      </div>
+      <div class="dump-edit-overlay" id="dump-edit-overlay">
+        <div class="dump-edit-card">
+          <p class="dump-edit-heading">edit task</p>
+          <input type="text" class="modal-input" id="dump-overlay-title" placeholder="task name" />
+          <p class="form-label" style="margin-bottom:8px;">category</p>
+          <div class="dump-inline-cats">
+            <button class="dump-inline-cat" data-cat="kids" onclick="pickDumpCat(null,this,'kids','#64B48C')" style="border: 1px solid rgba(100,180,140,0.4); color: #64B48C; background: transparent;">kids</button>
+            <button class="dump-inline-cat" data-cat="work" onclick="pickDumpCat(null,this,'work','#5AA0C8')" style="border: 1px solid rgba(90,160,200,0.4); color: #5AA0C8; background: transparent;">work</button>
+            <button class="dump-inline-cat" data-cat="home" onclick="pickDumpCat(null,this,'home','#B4A864')" style="border: 1px solid rgba(180,168,100,0.4); color: #B4A864; background: transparent;">home</button>
+            <button class="dump-inline-cat" data-cat="health" onclick="pickDumpCat(null,this,'health','#AA82C8')" style="border: 1px solid rgba(170,130,200,0.4); color: #AA82C8; background: transparent;">health</button>
+            <button class="dump-inline-cat" data-cat="personal" onclick="pickDumpCat(null,this,'personal','#C8E0C8')" style="border: 1px solid rgba(200,144,106,0.4); color: #C8906A; background: transparent;">personal</button>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px;">
+            <button class="start-fresh-btn" style="flex:1;margin:0;" onclick="closeDumpEditOverlay()">cancel</button>
+            <button class="cta-btn" style="flex:1;" onclick="saveDumpOverlayEdit()">done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 10: SENSORY TOOLKIT ============ -->
+    <!-- V2 CHANGE: Hard day mode and sensory toolkit are now surfaced directly on the
+         dashboard via the discover row. P2 couldn't locate hard day mode without prompting. -->
+    <div class="screen" id="screen-sensory" style="background:#E8E4DE;">
+      <div class="screen-scroll">
+        <div class="screen-header" style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div><h1 class="screen-title" style="color:#2A2A28;">toolkit.</h1><p class="screen-subtitle" style="color:#5A5A54;">for when you need to come back to yourself.</p></div>
+          <button class="back-btn" onclick="navigateTo('screen-dashboard');stopBreathing();" style="color:#5A5A54;"><img src="icons/arrow-counter-clockwise.svg" alt="" /> back</button>
+        </div>
+        <div class="toolkit-tabs">
+          <button class="toolkit-tab active" onclick="switchToolkit(this,'breathing')">box breathing</button>
+          <button class="toolkit-tab" onclick="switchToolkit(this,'grounding')">5-4-3-2-1</button>
+        </div>
+        <div class="toolkit-panel" id="toolkit-breathing">
+          <div class="breathing-container">
+            <dotlottie-player src="animations/box-breathing.json" autoplay loop style="width:260px;height:260px;"></dotlottie-player>
+          </div>
+          <div class="breathing-controls">
+            <button class="cta-btn" id="breathing-btn" onclick="toggleBreathing()" style="background:#5A7898;">start</button>
+          </div>
+        </div>
+        <div class="toolkit-panel hidden" id="toolkit-grounding">
+          <p class="toolkit-intro">bring yourself back. one sense at a time.</p>
+          <div class="grounding-card" id="grounding-card">
+            <div class="grounding-number" id="grounding-number">5</div>
+            <p class="grounding-question" id="grounding-question">what can you see?</p>
+            <textarea class="checkin-input" id="grounding-input" placeholder="write what you notice..." rows="2" style="background:#F0EDE8;color:#2A2A28;"></textarea>
+            <button class="cta-btn" onclick="nextGrounding()" style="margin-top:12px;background:#5A7898;">next</button>
+          </div>
+          <div class="grounding-complete" id="grounding-complete">
+            <img src="icons/check-fat.svg" class="confirm-icon" alt="" style="filter:hue-rotate(180deg) saturate(0.8) brightness(0.8);" />
+            <h3 class="done-title" style="color:#2A2A28;">you're back.</h3>
+            <p class="done-text" style="color:#5A5A54;">you just brought yourself into the present moment. that takes strength.</p>
+            <button class="cta-btn" onclick="resetGrounding()" style="margin-top:12px;background:#5A7898;">do it again</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ ADD TASK MODAL ============ -->
+    <div class="modal-overlay" id="add-task-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title">new task.</h2>
+          <button class="modal-close" onclick="closeAddTask()" aria-label="close">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-field"><label class="form-label">what needs to get done?</label><input type="text" class="modal-input" id="task-title-input" placeholder="e.g. call the school..." /></div>
+          <div class="modal-row">
+            <div class="modal-field half"><label class="form-label">date</label><input type="date" class="modal-input" id="task-date-input" /></div>
+            <div class="modal-field half"><label class="form-label">time estimate</label>
+              <select class="modal-input" id="task-time-input">
+                <option value="5">5 min</option>
+                <option value="15" selected>15 min</option>
+                <option value="30">30 min</option>
+                <option value="60">1 hour</option>
+                <option value="120">2+ hours</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-field"><label class="form-label">category</label>
+            <div class="category-picker">
+              <button class="cat-option selected" data-cat="kids" onclick="selectCategory(this)"><span class="cat-dot" style="background:#64B48C;"></span> kids</button>
+              <button class="cat-option" data-cat="work" onclick="selectCategory(this)"><span class="cat-dot" style="background:#5AA0C8;"></span> work</button>
+              <button class="cat-option" data-cat="home" onclick="selectCategory(this)"><span class="cat-dot" style="background:#B4A864;"></span> home</button>
+              <button class="cat-option" data-cat="health" onclick="selectCategory(this)"><span class="cat-dot" style="background:#AA82C8;"></span> health</button>
+              <button class="cat-option" data-cat="personal" onclick="selectCategory(this)"><span class="cat-dot" style="background:#C8906A;"></span> personal</button>
+              <button class="cat-option add-cat" onclick="addCustomCategory()"><span>+</span> new</button>
+            </div>
+          </div>
+          <div class="custom-cat-form" id="custom-cat-form">
+            <input type="text" class="modal-input" id="custom-cat-name" placeholder="category name" />
+            <input type="color" class="colour-picker" id="custom-cat-colour" value="#B8D4E8" />
+          </div>
+          <button class="breakdown-generate-btn" onclick="generateBreakdown()"><img src="icons/brain.svg" alt="" /> break it down</button>
+          <div class="breakdown-loading" id="breakdown-loading">
+            <div class="loading-dots"><span></span><span></span><span></span></div>
+            <p>breaking it down for you...</p>
+          </div>
+          <div class="breakdown-preview" id="breakdown-preview">
+            <p class="breakdown-preview-label">your steps</p>
+            <div id="breakdown-preview-steps"></div>
+          </div>
+        </div>
+        <button class="cta-btn" onclick="addTask()" style="margin-top:8px;">add task</button>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 11: SETTINGS ============ -->
+    <!-- V2 CHANGE: Check-in reminder toggle now lives HERE in settings only.
+         Removed from homepage per P3 feedback. -->
+    <div class="screen" id="screen-settings">
+      <div class="screen-scroll">
+        <div class="screen-header" style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div><h1 class="screen-title">settings.</h1></div>
+          <button class="back-btn" onclick="navigateTo('screen-dashboard')"><img src="icons/arrow-counter-clockwise.svg" alt="" /> back</button>
+        </div>
+        <div class="settings-section">
+          <p class="settings-section-label">profile</p>
+          <div class="settings-card">
+            <div class="settings-avatar"><img src="images/fluir-logo.png" alt="avatar" /></div>
+            <div class="settings-profile-info">
+              <p class="settings-name">Maya</p>
+              <p class="settings-detail">diagnosed October 2024</p>
+            </div>
+          </div>
+        </div>
+        <div class="settings-section">
+          <p class="settings-section-label">preferences</p>
+          <!-- V2 CHANGE: Dark mode toggle added — palette shift toward calmer,
+               more neutral tones responds to P1 (Saja) feedback on branding
+               feeling too feminine. Dark mode gives users control. -->
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <p class="settings-row-label">dark mode</p>
+              <p class="settings-row-sub">easier on the eyes</p>
+            </div>
+            <button class="ios-toggle active" aria-label="toggle dark mode">
+              <span class="toggle-thumb"></span>
+            </button>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <p class="settings-row-label">community tab</p>
+              <p class="settings-row-sub">show in bottom navigation</p>
+            </div>
+            <button class="ios-toggle active" id="community-toggle" onclick="toggleCommunity(this)" aria-label="toggle community">
+              <span class="toggle-thumb"></span>
+            </button>
+          </div>
+          <!-- V2 CHANGE: Check-in reminder MOVED HERE from homepage.
+               P3 feedback: "found the reminder on the homepage unnecessary —
+               expected it in settings." -->
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <p class="settings-row-label">check-in reminder</p>
+              <p class="settings-row-sub">daily at 8pm</p>
+            </div>
+            <button class="ios-toggle active" aria-label="toggle reminder">
+              <span class="toggle-thumb"></span>
+            </button>
+          </div>
+        </div>
+        <div class="settings-section">
+          <p class="settings-section-label">about</p>
+          <div class="settings-card about-card">
+            <img src="images/fluir-logo.png" alt="Fluir" class="about-logo" />
+            <div>
+              <p class="settings-name">Fluir</p>
+              <p class="settings-detail">v2.0 prototype — built for Assessment 3, 2043IBA, Griffith University T1 2026</p>
+              <p class="settings-detail" style="margin-top:4px;font-style:italic;">finally, something that gets <em>you.</em></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 12: MOOD ENTRIES ============ -->
+    <div class="screen" id="screen-mood-entries">
+      <div class="screen-scroll">
+        <div class="screen-header" style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div><h1 class="screen-title">your entries.</h1><p class="screen-subtitle">a record of how you have been.</p></div>
+          <button class="back-btn" onclick="navigateTo('screen-checkin')"><img src="icons/arrow-counter-clockwise.svg" alt="" /> back</button>
+        </div>
+        <div class="mood-entries-list">
+          <div class="mood-entry-card">
+            <div class="mood-entry-header">
+              <div class="mood-entry-date-row">
+                <span class="mood-entry-date">Thursday 15 May</span>
+                <span class="mood-entry-dot" style="background:#52A08E;" title="okay"></span>
+              </div>
+              <span class="mood-entry-label" style="color:#52A08E;">okay</span>
+            </div>
+            <div class="mood-entry-body">
+              <div class="mood-entry-field">
+                <p class="mood-entry-field-label">what went well</p>
+                <p class="mood-entry-field-text">I actually made the phone call I had been putting off for a week. it felt huge but once I did it took five minutes.</p>
+              </div>
+              <div class="mood-entry-field">
+                <p class="mood-entry-field-label">what was hard</p>
+                <p class="mood-entry-field-text">the school pickup was chaotic and I lost my keys twice. by 6pm I had nothing left.</p>
+              </div>
+            </div>
+          </div>
+          <div class="mood-entry-card">
+            <div class="mood-entry-header">
+              <div class="mood-entry-date-row">
+                <span class="mood-entry-date">Wednesday 14 May</span>
+                <span class="mood-entry-dot" style="background:#84A89E;" title="calm"></span>
+              </div>
+              <span class="mood-entry-label" style="color:#84A89E;">calm</span>
+            </div>
+            <div class="mood-entry-body">
+              <div class="mood-entry-field">
+                <p class="mood-entry-field-label">what went well</p>
+                <p class="mood-entry-field-text">had a slow morning for once. made coffee before anyone needed anything from me.</p>
+              </div>
+              <div class="mood-entry-field">
+                <p class="mood-entry-field-label">what was hard</p>
+                <p class="mood-entry-field-text">work email pile feels impossible. I keep opening it and closing it without replying.</p>
+              </div>
+            </div>
+          </div>
+          <div class="mood-entry-card">
+            <div class="mood-entry-header">
+              <div class="mood-entry-date-row">
+                <span class="mood-entry-date">Tuesday 13 May</span>
+                <span class="mood-entry-dot" style="background:#3D7A6A;" title="overwhelmed"></span>
+              </div>
+              <span class="mood-entry-label" style="color:#3D7A6A;">overwhelmed</span>
+            </div>
+            <div class="mood-entry-body">
+              <div class="mood-entry-field">
+                <p class="mood-entry-field-label">what went well</p>
+                <p class="mood-entry-field-text">I asked for help for the first time in a long time. my sister picked Mia up from school.</p>
+              </div>
+              <div class="mood-entry-field">
+                <p class="mood-entry-field-label">what was hard</p>
+                <p class="mood-entry-field-text">everything felt loud and too much. I cried in the car. I needed that.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hard day overlay -->
+    <div class="hard-day-overlay" id="hard-day-overlay">
+      <div class="hard-day-content">
+        <img src="images/fluir-logo.png" alt="Fluir" class="hard-day-logo" />
+        <h2 class="hard-day-title">breathe.</h2>
+        <p class="hard-day-text">take it one step at a time.</p>
+        <p class="hard-day-sub">you do not have to do everything today. you just have to be here.</p>
+        <button class="hard-day-toolkit-btn" onclick="deactivateHardDay();navigateTo('screen-sensory');">open sensory toolkit</button>
+        <button class="hard-day-back-btn" onclick="deactivateHardDay()">I'm ready to continue</button>
+      </div>
+    </div>
+
+    <!-- Confetti overlay -->
+    <div class="confetti-overlay" id="confetti-overlay">
+      <dotlottie-player src="animations/confetti.json" autoplay style="width:100%;height:100%;"></dotlottie-player>
+    </div>
+
+  </div>
+</div>
+
+<div class="audio-toast" id="audio-toast" role="status" aria-live="polite">
+  <img src="icons/headphones.svg" class="toast-icon" alt="" />
+  <span>audio coming in the full version</span>
+</div>
+
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
