@@ -231,7 +231,26 @@ function navigateTo(screenId) {
     const scroll = target.querySelector('.screen-scroll');
     if (scroll) scroll.scrollTop = 0;
   }
+  // map screens to nav button index (1-based nth-child)
+  const navMap = {
+    'screen-dashboard':    1,
+    'screen-tasks':        2,
+    'screen-task-detail':  2,
+    'screen-braindump':    1,
+    'screen-library':      3,
+    'screen-checkin':      4,
+    'screen-mood-entries': 4,
+    'screen-community':    5,
+  };
+  // clear ALL nav buttons across ALL screens
   document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  const navIndex = navMap[screenId];
+  if (navIndex) {
+    // set active on matching button in every nav bar
+    document.querySelectorAll(`.bottom-nav .nav-btn:nth-child(${navIndex})`).forEach(btn => {
+      btn.classList.add('active');
+    });
+  }
 }
 
 // ============ CHIP SELECTION ============

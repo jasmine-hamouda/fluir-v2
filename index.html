@@ -575,11 +575,11 @@
     <!-- ============ SCREEN 10: SENSORY TOOLKIT ============ -->
     <!-- V2 CHANGE: Hard day mode and sensory toolkit are now surfaced directly on the
          dashboard via the discover row. P2 couldn't locate hard day mode without prompting. -->
-    <div class="screen" id="screen-sensory" style="background:#E8E4DE;">
+    <div class="screen" id="screen-sensory" style="background:var(--surface-1);">
       <div class="screen-scroll">
         <div class="screen-header" style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div><h1 class="screen-title" style="color:#2A2A28;">toolkit.</h1><p class="screen-subtitle" style="color:#5A5A54;">for when you need to come back to yourself.</p></div>
-          <button class="back-btn" onclick="navigateTo('screen-dashboard');stopBreathing();" style="color:#5A5A54;"><img src="icons/arrow-counter-clockwise.svg" alt="" /> back</button>
+          <div><h1 class="screen-title" style="color:var(--text-primary);">toolkit.</h1><p class="screen-subtitle" style="color:var(--text-secondary);">for when you need to come back to yourself.</p></div>
+          <button class="back-btn" onclick="navigateTo('screen-dashboard');stopBreathing();" style="color:var(--text-secondary);"><img src="icons/arrow-counter-clockwise.svg" alt="" /> back</button>
         </div>
         <div class="toolkit-tabs">
           <button class="toolkit-tab active" onclick="switchToolkit(this,'breathing')">box breathing</button>
@@ -590,7 +590,7 @@
             <dotlottie-player src="animations/box-breathing.json" autoplay loop style="width:260px;height:260px;"></dotlottie-player>
           </div>
           <div class="breathing-controls">
-            <button class="cta-btn" id="breathing-btn" onclick="toggleBreathing()" style="background:#5A7898;">start</button>
+            <button class="cta-btn" id="breathing-btn" onclick="toggleBreathing()" style="background:var(--steel);">start</button>
           </div>
         </div>
         <div class="toolkit-panel hidden" id="toolkit-grounding">
@@ -598,14 +598,14 @@
           <div class="grounding-card" id="grounding-card">
             <div class="grounding-number" id="grounding-number">5</div>
             <p class="grounding-question" id="grounding-question">what can you see?</p>
-            <textarea class="checkin-input" id="grounding-input" placeholder="write what you notice..." rows="2" style="background:#F0EDE8;color:#2A2A28;"></textarea>
-            <button class="cta-btn" onclick="nextGrounding()" style="margin-top:12px;background:#5A7898;">next</button>
+            <textarea class="checkin-input" id="grounding-input" placeholder="write what you notice..." rows="2" style="background:var(--app-bg);color:var(--text-primary);"></textarea>
+            <button class="cta-btn" onclick="nextGrounding()" style="margin-top:12px;background:var(--steel);">next</button>
           </div>
           <div class="grounding-complete" id="grounding-complete">
             <img src="icons/check-fat.svg" class="confirm-icon" alt="" style="filter:hue-rotate(180deg) saturate(0.8) brightness(0.8);" />
-            <h3 class="done-title" style="color:#2A2A28;">you're back.</h3>
-            <p class="done-text" style="color:#5A5A54;">you just brought yourself into the present moment. that takes strength.</p>
-            <button class="cta-btn" onclick="resetGrounding()" style="margin-top:12px;background:#5A7898;">do it again</button>
+            <h3 class="done-title" style="color:var(--text-primary);">you're back.</h3>
+            <p class="done-text" style="color:var(--text-secondary);">you just brought yourself into the present moment. that takes strength.</p>
+            <button class="cta-btn" onclick="resetGrounding()" style="margin-top:12px;background:var(--steel);">do it again</button>
           </div>
         </div>
       </div>
